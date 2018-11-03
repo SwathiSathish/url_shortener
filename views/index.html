@@ -1,0 +1,89 @@
+<!doctype HTML>
+<html>
+  <head>
+    <title>
+      Index
+    </title>
+    <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>		
+  </head>
+  <body>
+    <input id="url" type="text" placeholder="url" name="url">
+    <input id="submit" type="submit">
+    <div id="shortcode"></div><br>
+
+    <!-- <form action="/url/all">
+      <button>Get all URL</button>
+    </form> -->
+
+
+    <div>
+      <div id="getResultDiv">
+        <h1> Get all URLs</h1>
+            <ul class="list-group">
+          </ul>
+        </div>
+    </div>
+
+    <!-- <input id="get_url" type="text" placeholder="url" name="url">
+    <input id="delete" type="submit"> -->
+
+
+    <script>
+        $(function(){
+            $('#submit').click(function(){
+                var url = $('#url').val();
+                $.post('/shorten', {url: url}, function (data) {
+                    $('#shortcode').html("Shortcode: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
+                });
+
+                // $.delete('/delete/url', {url: url}, function (data) {
+                //     $('#shortcode').html("Shortcode: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
+                // });
+
+                $.ajax({
+                  type : "GET",
+                  url :  "/url/all",
+                  success: function(result){
+                    $('#getResultDiv ul').empty();
+                    $.each(result, function(i, data){
+                      $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                    });
+                    console.log("Success: ", result);
+                  },
+                  error : function(e) {
+                    $("#getResultDiv").html("<strong>Error</strong>");
+                    console.log("ERROR: ", e);
+                  }
+                });	
+            });
+        });
+
+        function deleteRow(obj) {
+          var url = $('#delete_url').val();
+            $.ajax({
+                url: "/delete/url",
+                type: "DELETE",
+                data: {'url': url},
+                success: function(result){
+                    $('#getResultDiv ul').empty();
+                    $.each(result, function(i, data){
+                      $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                    });
+                    console.log("Success: ", result);
+                  },
+                  error : function(e) {
+                    $("#getResultDiv").html("<strong>Error</strong>");
+                    console.log("ERROR: ", e);
+                  }
+            });
+        } 
+
+         
+    </script>
+  </body>
+</html>
+
+
+
+
+
