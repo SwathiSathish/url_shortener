@@ -32,23 +32,7 @@
     <script>
       function func1() {
         $('.show_url').hide();
-
-        $.ajax({
-          type : "GET",
-          url :  "/url/all",
-          success: function(result){
-            $('#getResultDiv ul').empty();
-            $.each(result, function(i, data){
-              $('#getResultDiv .list-group').append('<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
-              $('.show_url').show();
-            });
-            console.log("Success: ", result);
-          },
-          error : function(e) {
-            $("#getResultDiv").html("<strong>Error</strong>");
-            console.log("ERROR: ", e);
-          }
-        });	
+        get_url();
       }
       window.onload=func1;
 
@@ -58,36 +42,21 @@
                 $.post('/shorten', {url: url}, function (data) {
                     $('#shortcode').html("Shortened URL: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
                 });
-
-                $.ajax({
-                  type : "GET",
-                  url :  "/url/all",
-                  success: function(result){
-                    $('#getResultDiv ul').empty();
-                    $.each(result, function(i, data){
-                      $('#getResultDiv .list-group').append('<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
-                      $('.show_url').show();
-                    });
-                    console.log("Success: ", result);
-                  },
-                  error : function(e) {
-                    $("#getResultDiv").html("<strong>Error</strong>");
-                    console.log("ERROR: ", e);
-                  }
-                });	
+                get_url();
             });
         });
 
         function deleteRow(obj) {
-          var url = $('#delete_url').val();
+          var url = obj.getAttribute("data-url");
             $.ajax({
-                url: "/delete/url",
+                url: "/delete/:url",
                 type: "DELETE",
                 data: {'url': url},
                 success: function(result){
                     $('#getResultDiv ul').empty();
                     $.each(result, function(i, data){
-                      $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                      window.location.reload();
+                      $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button data-url="'+ data + '" id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
                     });
                     console.log("Success: ", result);
                   },
@@ -97,6 +66,25 @@
                   }
             });
           } 
+
+          function get_url(){
+            $.ajax({
+              type : "GET",
+              url :  "/url/all",
+              success: function(result){
+                $('#getResultDiv ul').empty();
+                $.each(result, function(i, data){
+                  $('#getResultDiv .list-group').append('<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button data-url="'+ data + '" id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                  $('.show_url').show();
+                });
+                console.log("Success: ", result);
+              },
+              error : function(e) {
+                $("#getResultDiv").html("<strong>Error</strong>");
+                console.log("ERROR: ", e);
+              }
+            });	
+          }
          
     </script>
   </body>
