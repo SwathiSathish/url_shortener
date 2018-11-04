@@ -2,11 +2,12 @@
 <html>
   <head>
     <title>
-      Index
+      URL Shortener 
     </title>
     <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>		
   </head>
   <body>
+    <h1> URL Shortener</h1>
     <input id="url" type="text" placeholder="url" name="url">
     <input id="submit" type="submit">
     <div id="shortcode"></div><br>
@@ -18,7 +19,7 @@
 
     <div>
       <div id="getResultDiv">
-        <h1> Get all URLs</h1>
+        <h1 class="show_url">Showing all URLs:</h1>
             <ul class="list-group">
           </ul>
         </div>
@@ -30,15 +31,12 @@
 
     <script>
         $(function(){
+          $('.show_url').hide();
             $('#submit').click(function(){
                 var url = $('#url').val();
                 $.post('/shorten', {url: url}, function (data) {
-                    $('#shortcode').html("Shortcode: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
+                    $('#shortcode').html("Shortened URL: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
                 });
-
-                // $.delete('/delete/url', {url: url}, function (data) {
-                //     $('#shortcode').html("Shortcode: " +  '<a href= "/' + data + '">'   + window.location.href + data + '</a>');
-                // });
 
                 $.ajax({
                   type : "GET",
@@ -46,7 +44,8 @@
                   success: function(result){
                     $('#getResultDiv ul').empty();
                     $.each(result, function(i, data){
-                      $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                      $('#getResultDiv .list-group').append('<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
+                      $('.show_url').show();
                     });
                     console.log("Success: ", result);
                   },
@@ -76,8 +75,7 @@
                     console.log("ERROR: ", e);
                   }
             });
-        } 
-
+          } 
          
     </script>
   </body>

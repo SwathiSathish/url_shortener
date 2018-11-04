@@ -14,10 +14,12 @@ const routes = require('./app/routes/index.js');
 routes(app);
 
 app.get('/', function(req, res){
-    res.sendFile('index.html', { root: __dirname + "/views" } );
+    res.sendFile('index.html', { root: __dirname + "/views" , status: 'active'} );
 });
 
 
-app.listen(port, function() {
+const server = app.listen(port, function() {
   console.log("Listening on " + port);
 });
+
+module.exports = server;
