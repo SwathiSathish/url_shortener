@@ -13,11 +13,11 @@ npm start
 
 Open http://localhost:5000 and take a look around.
 
-## To Run tests
+** To Run tests
 
 npm test
 
-## Deployment
+** Deployment
 
 heroku create
 
