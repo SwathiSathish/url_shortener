@@ -30,8 +30,12 @@
 
 
     <script>
+      function func1() {
+        $('.show_url').hide();
+      }
+      window.onload=func1;
+
         $(function(){
-          $('.show_url').hide();
             $('#submit').click(function(){
                 var url = $('#url').val();
                 $.post('/shorten', {url: url}, function (data) {
