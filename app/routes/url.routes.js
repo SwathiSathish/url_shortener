@@ -1,11 +1,11 @@
 const shortner = require('../../shortner');
 const fs = require('fs')
-const get_all_urls = [];
+// const get_all_urls = [];
 
 
 module.exports = function(app, passport){  
     app.get('/:shortcode', (req, res) => {
-        console.log(req.params.shortcode);
+        // console.log(req.params.shortcode);
         let URL = shortner.expand(req.params.shortcode);
         res.redirect(URL);    
     });
@@ -21,14 +21,14 @@ module.exports = function(app, passport){
             }
             console.log("The file was saved!");
         }); 
-        get_all_urls.push(shortcode);
+        // get_all_urls.push(shortcode);
     })
 
     
     app.get("/url/all", function(req,res){
         console.log("Get All url");
         fs.readFile('urls.txt',  "utf8",  function(err, data) {
-            console.log(get_all_urls);
+            // console.log(get_all_urls);
             if(data){
                 return res.send(data.split('\n').filter(v=>v!=''));
             }
@@ -41,16 +41,21 @@ module.exports = function(app, passport){
         fs.readFile('urls.txt',  "utf8",  function(err, data) {
             if(data){
                 array = data.split('\n').filter(v=>v!='');
+                console.log(data, 'kkk');
                 var search_term = req.body.url;
-                for (var i=array.length-1; i>=0; i--) {
+                
+                for (var i = 0; i < array.length; i++) {
                     if (array[i] === search_term) {
                         array.splice(i, 1);
-
-                        fs.writeFile('urls.txt', array, function(){
+                    
+                        fs.writeFile('urls.txt',  array.join("\n"), function(){
                             console.log('done');
                         });
+                        // array.join('\n');
                     }
                 }
+                
+                console.log(array, 'hi');
                 return res.send(array);
             }
         });

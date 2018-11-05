@@ -56,6 +56,7 @@
                     $('#getResultDiv ul').empty();
                     $.each(result, function(i, data){
                       window.location.reload();
+                      console.log(result, data, 'hiii');
                       $('#getResultDiv .list-group').append( '<a href= "/' + data + '">'   + window.location.href + data + '</a>' +   ' <button data-url="'+ data + '" id="delete_url" onclick="deleteRow(this);">Delete</button> '+  '<br>');
                     });
                     console.log("Success: ", result);
