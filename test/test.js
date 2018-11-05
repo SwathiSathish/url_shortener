@@ -21,18 +21,6 @@ describe('server', function () {
         });
     });
 
-    // describe('Test submitting a URL', function () {
-    //     it('should return the shortened URL', function (done) {
-    //         request.post('http://localhost:5000/shorten', {form: {url: 'http://www.google.co.uk'}}, function (error, response, body) {
-    //             // let shortcode = shortner.shorten('http://www.google.co.uk');
-    //             // get_all_urls.push('http://localhost:5000/'+ shortcode);
-    //             // expect(body).to.include(shortcode);
-    //             expect(response.statusCode).to.equal(200);
-    //             done();
-    //         });
-    //     });
-    // });
-
 
     describe('Test submitting a URL', function () {
         it('should return the shortened URL', function (done) {
@@ -46,7 +34,6 @@ describe('server', function () {
     });
     
 
-   
     describe('Test following a URL', function () {
         it('should redirect the user to the shortened URL', function (done) {
             request.get('/:shortcode', 'http://www.google.co.uk', function () {
@@ -64,31 +51,27 @@ describe('server', function () {
         });
     });
 
-    describe('Get all the url', () => {
-        it('it should GET all the urls', (done) => {
-          chai.request(server)
-              .get('/url/all')
-              .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('array');
+
+    describe('Get all  the URL', function () {
+        it('it should GET all the urls', function (done) {
+            request.get('/url/all', function (error, response, body) {
+                URL = [ 'http://localhost:5000/1dTP']
+                expect(URL).to.eql(get_all_urls);
                 done();
-              });
+            });
         });
     });
 
 
-    describe('DELETE a url', function() {
-        it('should delete a url', function(done) {
-          chai.request(server)
-          .delete('/delete/url')
-          .end(function(error, response) {
-            response.should.have.status(200);
-            response.body.should.be.a('array');  
-            done();         
-          });
+    describe('DELETE a url', function () {
+        it('should delete a url', function (done) {
+            request.get('/delete/:url', 'http://www.google.co.uk', function (error, response, body) {
+                URL = [ 'http://localhost:5000/1dTP']
+                expect(URL).to.eql(get_all_urls);
+                done();
+            });
         });
-      });
-
+    });
 
 
 });
