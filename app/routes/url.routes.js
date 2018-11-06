@@ -1,6 +1,7 @@
 const shortner = require('../../shortner');
 const fs = require('fs')
-const get_all_urls = [];
+// const get_all_urls = [];
+const get_all_urls = {};
 
 
 module.exports = function(app, passport){  
@@ -21,19 +22,30 @@ module.exports = function(app, passport){
         //     }
         //     console.log("The file was saved!");
         // }); 
-        get_all_urls.push(shortcode);
+        // get_all_urls.push(shortcode);
+        // var fullUrl = req.protocol + '://' + req.get('host') + '/'+ shortcode;
+        get_all_urls[url] = shortcode;
     })
 
     
     app.get("/url/all", function(req,res){
         console.log("Get All url");
+        console.log(get_all_urls);
         // fs.readFile('urls.txt',  "utf8",  function(err, data) {
         //     // console.log(get_all_urls);
         //     if(data){
         //         return res.send(data.split('\n').filter(v=>v!=''));
         //     }
         // });
+        // get_all_urls.each do |key,value|
+        //     return res.send(get_all_urls[k] = get_all_urls[v]);
+
+        // end
+        // for(i in get_all_urls){
+        //     return res.send(get_all_urls[i])
+        // }
         return res.send(get_all_urls);
+        
     });
 
     app.delete("/delete/:url", function(req,res){
@@ -61,16 +73,15 @@ module.exports = function(app, passport){
         // });
 
         console.log("deleting a url");
-        var fullUrl = req.protocol + '://' + req.get('host') + '/'+ get_all_urls[0];
-        console.log(get_all_urls);
-        var array = get_all_urls; 
+        var shortcodes = Object.keys(get_all_urls);
         var search_term = req.body.url;
-         for (var i=array.length-1; i>=0; i--) {
-            if (array[i] === search_term) {
-                array.splice(i, 1);
-            }
-        }
-        return res.send(array);
+        shortcodes.forEach(function (key) {
+            if (get_all_urls[key] === search_term) {
+                delete get_all_urls[key];
+             }
+        });
+        
+        return res.send(get_all_urls);
     });
 };  
 
